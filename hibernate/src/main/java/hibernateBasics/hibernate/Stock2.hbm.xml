@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="hibernateBasics.hibernate.models.Stock2" table="stock" catalog="hibernate">
+		<id name="stockId" type="java.lang.Integer">
+			<column name="STOCK_ID" />
+			<generator class="identity" />
+		</id>
+		<property name="stockCode" type="string">
+			<column name="STOCK_CODE" length="10" not-null="true" unique="true" />
+		</property>
+		<property name="stockName" type="string">
+			<column name="STOCK_NAME" length="20" not-null="true" unique="true" />
+		</property>
+		<set name="stockDailyRecords" table="stock_daily_record" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="STOCK_ID" not-null="true" />
+			</key>
+			<one-to-many class="hibernateBasics.hibernate.models.StockDailyRecord" />
+		</set>
+	</class>
+	<class name="hibernateBasics.hibernate.models.StockDailyRecord" table="stock_daily_record"
+		catalog="hibernate">
+		<id name="recordId" type="java.lang.Integer">
+			<column name="RECORD_ID" />
+			<generator class="identity" />
+		</id>
+		<many-to-one name="stock" class="hibernateBasics.hibernate.models.Stock2"
+			fetch="select">
+			<column name="STOCK_ID" not-null="true" />
+		</many-to-one>
+		<property name="priceOpen" type="java.lang.Float">
+			<column name="PRICE_OPEN" precision="6" />
+		</property>
+		<property name="priceClose" type="java.lang.Float">
+			<column name="PRICE_CLOSE" precision="6" />
+		</property>
+		<property name="priceChange" type="java.lang.Float">
+			<column name="PRICE_CHANGE" precision="6" />
+		</property>
+		<property name="volume" type="java.lang.Long">
+			<column name="VOLUME" />
+		</property>
+		<property name="date" type="date">
+			<column name="DATE" length="10" not-null="true" unique="true" />
+		</property>
+	</class>
+</hibernate-mapping>
